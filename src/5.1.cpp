@@ -15,7 +15,3 @@ void socket_addr_5_1_2_()// 5.1.2章节， 通用Socket地址
     cout << szValue1 << endl;
     cout << szValue2 << endl;
 }
-
-int add(int a, int b){
-    return a + b;
-}

@@ -1,0 +1,1 @@
+/usr/bin/g++ -g CMakeFiles/main.dir/main.cpp.o CMakeFiles/main.dir/src/5.1.cpp.o -o main 

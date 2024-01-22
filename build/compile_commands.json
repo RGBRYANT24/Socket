@@ -1,0 +1,12 @@
+[
+{
+  "directory": "/root/Projects/Socket/build",
+  "command": "/usr/bin/g++   -g -std=gnu++11 -o CMakeFiles/main.dir/main.cpp.o -c /root/Projects/Socket/main.cpp",
+  "file": "/root/Projects/Socket/main.cpp"
+},
+{
+  "directory": "/root/Projects/Socket/build",
+  "command": "/usr/bin/g++   -g -std=gnu++11 -o CMakeFiles/main.dir/src/5.1.cpp.o -c /root/Projects/Socket/src/5.1.cpp",
+  "file": "/root/Projects/Socket/src/5.1.cpp"
+}
+]

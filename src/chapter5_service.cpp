@@ -19,6 +19,12 @@ void server_5_4_listen() // 监听服务器端程序
     char buffer[1024] = {0};
     const char *message = "Hello from server";
     const char *oob_msg = "Server oob message";
+    //修改TCP发送缓冲区的大小
+    int sendbuf = 32768;
+    int len_send = sizeof(sendbuf);
+    //设置接受缓冲区大小
+    int recvbuf = 32768;
+    int len_recv = sizeof(recvbuf);
 
     //创建Socket文件描述符
     //if((server_fd == socket(AF_INET, SOCK_STREAM, 0)) == 0)
@@ -36,8 +42,16 @@ void server_5_4_listen() // 监听服务器端程序
         exit(EXIT_FAILURE);
     }
     address.sin_family = AF_INET;
-    address.sin_addr.s_addr = INADDR_ANY;
+    address.sin_addr.s_addr = INADDR_ANY; 
     address.sin_port = htons(8080);
+
+    //在bind之前修改接受缓冲区大小，然后立即读取
+    setsockopt(server_fd, SOL_SOCKET, SO_RCVBUF, &recvbuf, sizeof(recvbuf));
+    getsockopt(server_fd, SOL_SOCKET, SO_RCVBUF, &recvbuf, (socklen_t* )&len_recv);
+    cout << "TCP revive buffer size after resize: " << recvbuf << endl;
+    //在bind之前修改发送缓冲区大小，然后立即读取
+    setsockopt(server_fd, SOL_SOCKET, SO_SNDBUF, &sendbuf, sizeof(sendbuf));
+    getsockopt(server_fd, SOL_SOCKET, SO_SNDBUF, &sendbuf, (socklen_t* )&len_send);
 
     //绑定Socket到地址
     if(bind(server_fd, (struct sockaddr *)& address, sizeof(address)) < 0)
@@ -46,6 +60,7 @@ void server_5_4_listen() // 监听服务器端程序
         exit(EXIT_FAILURE);
     }
 
+    
     //开始监听
     if(listen(server_fd, 3) < 0)
     {

@@ -4,11 +4,20 @@
 #include <unistd.h>
 #include <string.h>
 
+using namespace std;
+
 void client_5_4()
 {
     int sock = 0, valread;
     struct sockaddr_in serv_addr;
     char buffer[1024] = {0};
+
+    //修改TCP发送缓冲区的大小
+    int sendbuf = 32768;
+    int len_send = sizeof(sendbuf);
+    //设置接受缓冲区大小
+    int recvbuf = 32768;
+    int len_recv = sizeof(recvbuf);
 
     // 创建socket
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
@@ -25,6 +34,15 @@ void client_5_4()
         return;
     }
   
+    //在connect之前修改发送缓冲区大小，然后立即读取
+    setsockopt(sock, SOL_SOCKET, SO_SNDBUF, &sendbuf, sizeof(sendbuf));
+    getsockopt(sock, SOL_SOCKET, SO_SNDBUF, &sendbuf, (socklen_t* )&len_send);
+    cout << "TCP send buffer size after resize: " << sendbuf << endl;
+    //在connect之前修改接受缓冲区大小，然后立即读取
+    setsockopt(sock, SOL_SOCKET, SO_RCVBUF, &recvbuf, sizeof(recvbuf));
+    getsockopt(sock, SOL_SOCKET, SO_RCVBUF, &recvbuf, (socklen_t* )&len_recv);
+    cout << "TCP revive buffer size after resize: " << recvbuf << endl;
+
     // 连接到服务器
     if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
         std::cout << "\nConnection Failed \n";
